@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<company>
+	<staff no="1111">
+		<firstname>cho</firstname>
+		<lastname>sung il</lastname>
+		<nickname>sungil</nickname>
+		<salary>10000</salary>
+	</staff>
+	<staff no="2222">
+		<firstname>hong</firstname>
+		<lastname>gil dong</lastname>
+		<nickname>gildong</nickname>
+		<salary>20000</salary>
+	</staff>
+	
+</company>

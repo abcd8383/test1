@@ -41,7 +41,7 @@ public class QnADAO {
 	}
 	//개인 문의 목록을 조회
 	public ArrayList<QnaDTO> selectQnaList(String id, int pageNo){
-		String sql = "select * from (select ceil(rownum / 5) as page, qno, title, content, wdate, writer, status, response from (select * from qna where writer = ? order by qno desc)) where page = ?";
+		String sql = "select * from (select ceil(rownum / 5) as page, qno, title, content, wdate, writer, status, nvl(response,'입력된 답변이 없습니다') from (select * from qna where writer = ? order by qno desc)) where page = ?";
 		ArrayList<QnaDTO> list = new ArrayList<QnaDTO>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -62,7 +62,7 @@ public class QnADAO {
 	}
 
 	public ArrayList<QnaDTO> selectQnaAdminList(int pageNo) {
-		String sql = "select * from (select ceil(rownum / 5) as page, qno, title, content, wdate, writer, status, response from (select * from qna order by status asc, qno desc)) where page = 1";
+		String sql = "select * from (select ceil(rownum / 5) as page, qno, title, content, wdate, writer, status, response from (select * from qna order by status asc, qno desc)) where page = ?";
 		ArrayList<QnaDTO> list = new ArrayList<QnaDTO>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -101,7 +101,43 @@ public class QnADAO {
 		return list;
 	}
 
-	
+	public int selectCountQna() {
+		String sql = "select count(*) from qna";
+		int count = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = DBManager.getInstance().getConn().prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				count = rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+
+	public QnaDTO selectQna(int qno) {
+		String sql = "select qno, title, content, wdate, writer, status, nvl(response,'답변 없음') from qna where qno = ?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		QnaDTO dto = null;
+		try {
+			pstmt = DBManager.getInstance().getConn().prepareStatement(sql);
+			pstmt.setInt(1, qno);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dto = new QnaDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dto;
+	}
 }
 
 

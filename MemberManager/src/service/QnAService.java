@@ -33,6 +33,15 @@ public class QnAService {
 	public ArrayList<QnaDTO> selectNoAnswerList() {
 		return dao.selectNoAnswerList();
 	}
+
+	public int selectCount() {
+		return dao.getInstance().selectCountQna();
+	}
+
+
+	public QnaDTO selectQna(int qno) {
+		return dao.getInstance().selectQna(qno);
+	}
 	
 	
 }
